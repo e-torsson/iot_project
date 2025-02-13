@@ -57,7 +57,19 @@ def list_database():
     rows = cur.fetchall()
     return render_template("list.html", rows=rows)
 
-
+def insert_sensor_data(temp, hum, time, on_off):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("INSERT INTO temp_hum_data (temp, hum, time, on_off) VALUES (?, ?, ?, ?)", 
+                       (temp, hum, time, on_off))
+        conn.commit()
+        return {"message:": "Sensor data inserted suvvessfully"}
+    except sqlite3.Error as e:
+        return {"error": f"Database error: {e}"}
+    finally:
+        conn.close()
 
 def insert_test_data():
     try:
