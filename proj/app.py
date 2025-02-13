@@ -24,11 +24,17 @@ def input_data():
 
 @app.route('/list')
 def list_db():
-    return "list the db"
+    return database.list_database()
 
 @app.route('/get_latest_data')
 def view_data():
     data = database.get_latest_data()
+    return jsonify(data)
+
+@app.route('/insert_test_data')
+def insert_test():
+    """Flask route to insert test sensor data."""
+    data = database.insert_test_data()
     return jsonify(data)
 
 if __name__ == "__main__":

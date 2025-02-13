@@ -1,3 +1,4 @@
+from flask import render_template
 import sqlite3
 import os
 
@@ -45,3 +46,38 @@ def get_latest_data():
             "on_off": bool(row[3])
         }
     return {"error": "No data available"}
+
+def list_database():
+    conn = get_db_connection()
+    conn.row_factory = sqlite3.Row
+    
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM temp_hum_data")
+    
+    rows = cur.fetchall()
+    return render_template("list.html", rows=rows)
+
+
+
+def insert_test_data():
+    try:
+        import random
+        from datetime import datetime
+    except ImportError as e:
+        print(f"Import error: {e}")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    for i in range(5):
+        temp = round(random.uniform(15, 30), 2)
+        hum = round(random.uniform(30, 80), 2) 
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        on_off = random.choice([0, 1])
+
+        cursor.execute("INSERT INTO temp_hum_data (temp, hum, time, on_off) VALUES (?, ?, ?, ?)", 
+                    (temp, hum, time, on_off))
+
+        conn.commit()
+    conn.close()
+    return {"message": "Test data inserted", "temp": temp, "hum": hum, "time": time, "on_off": on_off}
+        
