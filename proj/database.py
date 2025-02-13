@@ -66,8 +66,10 @@ def insert_sensor_data(temp, hum, time, on_off):
                        (temp, hum, time, on_off))
         conn.commit()
         return {"message:": "Sensor data inserted suvvessfully"}
+    
     except sqlite3.Error as e:
         return {"error": f"Database error: {e}"}
+    
     finally:
         conn.close()
 

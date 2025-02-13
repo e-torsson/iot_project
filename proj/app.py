@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, g
+from flask import Flask, render_template, jsonify, request
 import database
 
 app = Flask(__name__)
@@ -30,6 +30,25 @@ def list_db():
 def view_data():
     data = database.get_latest_data()
     return jsonify(data)
+
+@app.route('/send_sensor_data', methods=['POST'])
+def send_sensor_data():
+    try:
+        data = request.get_json()
+        
+        temp = data.get("temp")
+        hum = data.get("hum")
+        time = data.get("time")
+        on_off = data.get("on_off")
+        
+        if None in (temp, hum, time, on_off):
+            return jsonify({"error": "Missing data"}), 400
+        
+        response = database.insert_sensor_data(temp, hum, time, on_off)
+        return jsonify(response)
+    
+    except Exception as e:
+        return jsonify({"error": f"Server error: {e}"}), 500
 
 @app.route('/insert_test_data')
 def insert_test():
