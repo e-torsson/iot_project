@@ -59,7 +59,7 @@ def list_database():
     cur.execute("SELECT * FROM temp_hum_data")
     
     rows = cur.fetchall()
-    return render_template("list.html", rows=rows)
+    return render_template("list_database.html", rows=rows)
 
 def insert_sensor_data(temp, hum, light_intensity, on_off):
     conn = get_db_connection()

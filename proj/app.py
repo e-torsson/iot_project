@@ -9,22 +9,22 @@ app = Flask(__name__)
 def first_page():
     return render_template("first_page.html")
 
-@app.route('/createdb')
+@app.route('/create_database')
 def createdb():
     try:
         database.create_db()
-        return "Database Created Successfully"
+        return render_template('create_database.html')
     except Exception as e:
         print(f"Something went wrong creating database: {e}")
 
 
-@app.route('/input_data')
-def input_data():
+@app.route('/insert_data')
+def insert_data():
     data = database.insert_test_data()
-    return jsonify(data)
+    return render_template('insert_data.html', message="Test data inserted successfully!")
 
 
-@app.route('/list')
+@app.route('/list_database')
 def list_db():
     return database.list_database()
 
@@ -51,12 +51,6 @@ def send_sensor_data():
     
     except Exception as e:
         return jsonify({"error": f"Server error: {e}"}), 500
-
-# @app.route('/input_data')
-# def insert_test():
-#     """Flask route to insert test sensor data."""
-#     data = database.insert_test_data()
-#     return jsonify(data)
 
 if __name__ == "__main__":
     app.run()
