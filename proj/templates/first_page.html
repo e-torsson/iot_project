@@ -65,7 +65,7 @@
                 <tr>
                     <th>Temperature (°C)</th>
                     <th>Humidity (%)</th>
-                    <th>Timestamp</th>
+                    <th>Light Intensity</th> <!-- Changed from Timestamp -->
                     <th>Status</th>
                 </tr>
             </thead>
@@ -78,33 +78,39 @@
     </div>
 
     <script>
-      function fetchData() {
-          fetch('/get_latest_data')
-          .then(response => response.json())
-          .then(data => {
-              let displayElement = document.getElementById("sensorData");
-      
-              if (data.error) {
-                  displayElement.innerHTML = `<p style="color: red;">${data.error}</p>`;
-              } else {
-                  displayElement.innerHTML = `
-                      <p>Temperature: ${data.temp}°C</p>
-                      <p>Humidity: ${data.hum}%</p>
-                      <p>Timestamp: ${data.time}</p>
-                      <p>Status: ${data.on_off ? "ON" : "OFF"}</p>
-                  `;
-              }
-          })
-          .catch(error => console.error("Error fetching data:", error));
-      }
-      
-      // Fetch data every 5 seconds
-      setInterval(fetchData, 5000);
-      fetchData();
-      </script>
-      
-      <div id="sensorData"></div>
-      
+        function fetchSensorData() {
+            fetch('/get_latest_data')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error(data.error);
+                        return;
+                    }
 
+                    const tbody = document.getElementById("sensor-data");
+                    tbody.innerHTML = "";  // Clear previous rows
+
+                    // Loop through all rows in 'data' and create a new row for each
+                    data.data.forEach(sensor => {
+                        const newRow = `
+                            <tr>
+                                <td>${sensor.temp} °C</td>
+                                <td>${sensor.hum} %</td>
+                                <td>${sensor.light_intensity}</td> <!-- Updated to display light intensity -->
+                                <td>${sensor.on_off ? "ON" : "OFF"}</td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += newRow;  // Append each row
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Fetch new data every 5 seconds
+        setInterval(fetchSensorData, 5000);
+
+        // Fetch data once immediately
+        fetchSensorData();
+    </script>
 </body>
 </html>

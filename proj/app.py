@@ -38,13 +38,13 @@ def send_sensor_data():
         
         temp = data.get("temp")
         hum = data.get("hum")
-        time = data.get("time")
+        light_intensity = data.get("light_intensity")
         on_off = data.get("on_off")
         
-        if None in (temp, hum, time, on_off):
+        if None in (temp, hum, light_intensity, on_off):
             return jsonify({"error": "Missing data"}), 400
         
-        response = database.insert_sensor_data(temp, hum, time, on_off)
+        response = database.insert_sensor_data(temp, hum, light_intensity, on_off)
         return jsonify(response)
     
     except Exception as e:

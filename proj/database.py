@@ -15,14 +15,14 @@ def create_db():
         conn.execute('''CREATE TABLE IF NOT EXISTS temp_hum_data (
             temp FLOAT,
             hum FLOAT,
-            time TEXT,
+            light_intensity INT,
             on_off INT)''')
         conn.commit()
     except sqlite3.Error as e:
         print(f"Database error: {e}")
     finally:
         conn.close()
-        
+
 def get_latest_data():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -34,17 +34,21 @@ def get_latest_data():
         conn.close()
         return {"error": "Database not initialized"}
     
-    cursor.execute("SELECT temp, hum, time, on_off FROM temp_hum_data ORDER BY time DESC LIMIT 1")
-    row = cursor.fetchone()
+    cursor.execute("SELECT temp, hum, light_intensity, on_off FROM temp_hum_data ORDER BY temp ASC LIMIT 5")
+    rows = cursor.fetchall()
     conn.close()
     
-    if row:
-        return{
-            "temp": row[0],
-            "hum": row[1],
-            "time": row[2],
-            "on_off": bool(row[3])
-        }
+    if rows:
+        data = []
+        for row in rows:
+            data.append({
+                "temp": row[0],
+                "hum": row[1],
+                "light_intensity": row[2],
+                "on_off": bool(row[3])
+            })
+        return {"data": data}  # Return a list of rows as 'data'
+    
     return {"error": "No data available"}
 
 def list_database():
@@ -57,13 +61,13 @@ def list_database():
     rows = cur.fetchall()
     return render_template("list.html", rows=rows)
 
-def insert_sensor_data(temp, hum, time, on_off):
+def insert_sensor_data(temp, hum, light_intensity, on_off):
     conn = get_db_connection()
     cursor = conn.cursor()
     
     try:
-        cursor.execute("INSERT INTO temp_hum_data (temp, hum, time, on_off) VALUES (?, ?, ?, ?)", 
-                       (temp, hum, time, on_off))
+        cursor.execute("INSERT INTO temp_hum_data (temp, hum, light_intensity, on_off) VALUES (?, ?, ?, ?)", 
+                       (temp, hum, light_intensity, on_off))
         conn.commit()
         return {"message:": "Sensor data inserted suvvessfully"}
     
@@ -76,7 +80,6 @@ def insert_sensor_data(temp, hum, time, on_off):
 def insert_test_data():
     try:
         import random
-        from datetime import datetime
     except ImportError as e:
         print(f"Import error: {e}")
 
@@ -85,13 +88,13 @@ def insert_test_data():
     for i in range(5):
         temp = round(random.uniform(15, 30), 2)
         hum = round(random.uniform(30, 80), 2) 
-        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        light_intensity = random.randint(0, 1023)
         on_off = random.choice([0, 1])
 
-        cursor.execute("INSERT INTO temp_hum_data (temp, hum, time, on_off) VALUES (?, ?, ?, ?)", 
-                    (temp, hum, time, on_off))
+        cursor.execute("INSERT INTO temp_hum_data (temp, hum, light_intensity, on_off) VALUES (?, ?, ?, ?)", 
+                    (temp, hum, light_intensity, on_off))
 
         conn.commit()
     conn.close()
-    return {"message": "Test data inserted", "temp": temp, "hum": hum, "time": time, "on_off": on_off}
+    return {"message": "Test data inserted", "temp": temp, "hum": hum, "light_intensity": light_intensity, "on_off": on_off}
         
