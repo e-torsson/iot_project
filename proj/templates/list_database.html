@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        nav {
+            background: #333;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+            padding: 8px 12px;
+            display: inline-block;
+        }
+        nav a:hover {
+            background: #555;
+            border-radius: 5px;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/list_database">View Database</a>
+        <a href="/create_database">Create Database</a>
+        <a href="/insert_data">Insert Data</a>
+    </nav>
+
+    <div class="container">
+        <h1>Here you can inspect all data in the database</h1>
+        <p>Use the navigation bar to interact with the system.</p>
+
+        <h2>Sensor Data</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Temperature (°C)</th>
+                    <th>Humidity (%)</th>
+                    <th>Light Intensity</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td>{{ row["temp"] }}</td>
+                    <td>{{ row["hum"] }}</td>
+                    <td>{{ row["light_intensity"] }}</td>
+                    <td>{{ row["on_off"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

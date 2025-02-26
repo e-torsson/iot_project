@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        nav {
+            background: #333;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+            padding: 8px 12px;
+            display: inline-block;
+        }
+        nav a:hover {
+            background: #555;
+            border-radius: 5px;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/list_database">View Database</a>
+        <a href="/create_database">Create Database</a>
+        <a href="/insert_data">Insert Data</a>
+    </nav>
+
+    <div class="container">
+        <h1>Insert Data</h1>
+
+        {% if message %}
+        <p style="color: green; font-weight: bold;">{{ message }}</p>
+        {% endif %}
+
+        <p>This is used to add random test data.</p>
+        <p>After inserting data, you can go to the "View Database" tab to see the updated records.</p>
+    </div>
+</body>
+</html>
