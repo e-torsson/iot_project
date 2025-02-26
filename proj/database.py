@@ -34,7 +34,7 @@ def get_latest_data():
         conn.close()
         return {"error": "Database not initialized"}
     
-    cursor.execute("SELECT temp, hum, light_intensity, on_off FROM temp_hum_data ORDER BY temp ASC LIMIT 5")
+    cursor.execute("SELECT temp, hum, light_intensity, on_off FROM temp_hum_data ORDER BY rowid DESC LIMIT 5")
     rows = cursor.fetchall()
     conn.close()
     

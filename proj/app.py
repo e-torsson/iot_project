@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect
 import database
 
 app = Flask(__name__)
@@ -20,7 +20,9 @@ def createdb():
 
 @app.route('/input_data')
 def input_data():
-    return "input data"
+    data = database.insert_test_data()
+    return jsonify(data)
+
 
 @app.route('/list')
 def list_db():
@@ -50,11 +52,11 @@ def send_sensor_data():
     except Exception as e:
         return jsonify({"error": f"Server error: {e}"}), 500
 
-@app.route('/insert_test_data')
-def insert_test():
-    """Flask route to insert test sensor data."""
-    data = database.insert_test_data()
-    return jsonify(data)
+# @app.route('/input_data')
+# def insert_test():
+#     """Flask route to insert test sensor data."""
+#     data = database.insert_test_data()
+#     return jsonify(data)
 
 if __name__ == "__main__":
     app.run()

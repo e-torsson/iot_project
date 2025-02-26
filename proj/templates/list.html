@@ -49,8 +49,8 @@
    <body>
     <nav>
         <a href="/">Home</a>
-        <a href="/createdb">Create Database</a>
         <a href="/list">View Database</a>
+        <a href="/createdb">Create Database</a>
         <a href="/input_data">Input Data</a>
     </nav>
 
@@ -64,7 +64,7 @@
                 <tr>
                     <th>Temperature (°C)</th>
                     <th>Humidity (%)</th>
-                    <th>Timestamp</th>
+                    <th>Light Intensity</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -73,7 +73,7 @@
                 <tr>
                     <td>{{row["temp"]}}</td>
                     <td>{{row["hum"]}}</td>
-                    <td>{{row["time"]}}</td>
+                    <td>{{row["light_intensity"]}}</td>
                     <td>{{row["on_off"]}}</td>
                 </tr>
             {% endfor %}
